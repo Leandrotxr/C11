@@ -6,14 +6,5 @@ for i in range(3):
     pessoa = {"Nome": nome, "Peso": peso}
     pessoas.append(pessoa)
 
-maisPesada = pessoas[0]
-maisLeve = pessoas[0]
-
-for pessoa in pessoas:
-    if pessoa["Peso"] > maisPesada["Peso"]:
-        maisPesada = pessoa
-    if pessoa["Peso"] < maisLeve["Peso"]:
-        maisLeve = pessoa
-
-print("Pessoa mais pesada:", maisPesada["Nome"])
-print("Pessoa mais leve:", maisLeve["Nome"])
+print("Pessoa mais pesada:", max(pessoas, key=lambda x: x["Peso"]))
+print("Pessoa mais leve:", min(pessoas, key=lambda x: x["Peso"]))
