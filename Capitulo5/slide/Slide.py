@@ -46,3 +46,42 @@ print(df.iloc[0:2,:])
 #fazendo slicing com loc (padrão numpy)
 print(df.loc[['A','B'],['W','X','Y','Z']]) #bom quando precio de colunas que não estão lado a lado
 print(df.loc[['A','B'],['W','Z']])
+
+dfpaises = pd.read_csv('../data/paises.csv', delimiter=';')
+print(dfpaises.columns) #mostrando apenas  as colunas
+print(dfpaises.head(2)) #mostrando apenas os dois primeiros
+print(dfpaises.tail(2)) #mostrando apenas os dois ultimos
+
+#criando uma nova coluna no dataset
+totalPopulation = np.sum(dfpaises['Population'])
+seriesPercPopulation = (dfpaises['Population'] / totalPopulation) * 100
+dfpaises['PopulationPercent'] = np.round(seriesPercPopulation, 3)
+dfpaises.to_csv('../data/paises_v2.csv', sep = ';')
+#dfpaises.drop('Region', axis=1) #usada para deletar uma coluna
+
+dfpaises2 = pd.read_csv('../data/paises_v2.csv', sep = ';') #lendo o novo dataset
+print(dfpaises2)
+
+#agrupando
+groupRegion = dfpaises2.groupby('Region')
+print(groupRegion.count()['Country']) #contando quantos paises tenho por região
+print(groupRegion.sum()['Country']) #contando quantos paises tenho por região
+print(groupRegion.sum()['Population']) #soma da população de cada região
+print(groupRegion.describe())
+
+def tenpercent(x):
+    return x * 0.9
+
+deathrate1 = dfpaises['Deathrate']
+print(deathrate1)
+
+deathrate2 = dfpaises2['Deathrate'].apply(tenpercent)
+print(deathrate2)
+
+dfpaises3 = pd.concat([deathrate1, deathrate2],axis=1)
+dfpaises3.columns = ["Taxa de mortalidade", "Taxa de mortalidade com desconto"] #mudando o nome das colunas
+print(dfpaises3)
+
+#dados ausente
+novodf = dfpaises3.dropna() #remove linhas que possuam dados ausentes
+novodf2 = dfpaises2.fillna(0) #preenche dados ausentes com o valor desejado
